@@ -101,6 +101,8 @@ class Game(QtWidgets.QWidget):
                 elif self.grid[x][y]==4:
                     button.setText('4')
                     button.setStyleSheet("QPushButton {color : rgba(255, 100, 0, 0)}")
+                elif button.text()>'4':
+                    button.setStyleSheet("QPushButton {color : rgba(74, 255, 165, 0)}")
                 else:
                     button.setText('0')
                     button.setStyleSheet("QPushButton {color : rgba(1, 1, 1, 0)}")
@@ -132,6 +134,8 @@ class Game(QtWidgets.QWidget):
             button.setStyleSheet("QPushButton {color : rgba(255, 100, 40, 255)}")
         elif button.text()=='4':
             button.setStyleSheet("QPushButton {color : rgba(255, 100, 0, 255)}")
+        elif button.text()>'4':
+            button.setStyleSheet("QPushButton {color : rgba(74, 255, 165, 255)}")
         self.checkwin()
 
     def handle_right_click(self, button, x, y):
@@ -153,6 +157,8 @@ class Game(QtWidgets.QWidget):
             elif self.grid[x][y]==4:
                 button.setText('4')
                 button.setStyleSheet("QPushButton {color : rgba(255, 100, 0, 0)}")
+            elif button.text()>'4':
+                button.setStyleSheet("QPushButton {color : rgba(74, 255, 165, 0)}")
             else:
                 button.setText('0')
                 button.setStyleSheet("QPushButton {color : rgba(10, 9, 36, 0)}")
