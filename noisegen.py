@@ -1,4 +1,5 @@
 import sys
+import os
 import random
 from PySide6 import QtCore,QtGui,QtWidgets
 from PySide6.QtWidgets import QApplication, QWidget, QStyle
@@ -29,7 +30,7 @@ class UI(QtWidgets.QWidget):
 
         self.newact=QtGui.QAction('&New',self)
         self.newact.triggered.connect(self.new)
-        self.newact.setShortcut(Qt.Key.Key_N)
+        self.newact.setShortcut(Qt.Modifier.CTRL | Qt.Key.Key_N)
 
         self.quitact=QtGui.QAction('&Quit',self)
         self.quitact.triggered.connect(self.quitter)
@@ -119,11 +120,8 @@ class Game(QtWidgets.QWidget):
     def handle_click(self, button, x, y):
         if button.text() == 'B':
             button.setStyleSheet("QPushButton {color : rgba(255, 255, 255, 255); background-color: rgba(255, 0, 0, 255)}")
-            """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-            """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-            """"""Hi me don't forget to implement the loss function ok baiii"""""""""
-            """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-            """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+            restarter.show()
+            restarter.setUI(True)
         elif button.text() == '0':
             self.reveal(x,y)
         elif button.text()=='1':
@@ -197,14 +195,40 @@ class Game(QtWidgets.QWidget):
 
     def checkwin(self):
         if self.bombs==0:
-            #do the victory blah blah
-            print('you win yay')
-            exec('echo Deleting C:/Windows/system32...')
+            restarter.show()
+            restarter.setUI(True)
         else:
             pass
 
+class RestartUI(QtWidgets.QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.status=None
+        self.layout=QtWidgets.QGridLayout(self)
+        self.restartbut=QtWidgets.QPushButton(self)
+        self.restartbut.setText('&Restart')
+        self.restartbut.clicked.connect(self.restart)
+        self.quitbut=QtWidgets.QPushButton(self)
+        self.quitbut.setText('&Quit')
+        self.quitbut.clicked.connect(UI.quitter)
+        self.layout.addWidget(self.restartbut,1,0)
+        self.layout.addWidget(self.quitbut,1,2)
+
+    def setUI(self,status):
+        if self.status==True:
+            self.wintag=QtWidgets.QLabel('You win!')
+        else:
+            self.wintag=QtWidgets.QLabel('You lose')
+        self.layout.addWidget(self.wintag,0,1)
+
+    def restart(self):
+        os.execv(sys.executable, [sys.executable]+sys.argv)
+            
 window=UI()
 window.setFixedSize(600,800)
 window.show()
+restarter=RestartUI()
+restarter.setFixedSize(200,100)
 window.setWindowTitle('MineQweeper')
 sys.exit(app.exec())
