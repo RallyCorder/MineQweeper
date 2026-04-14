@@ -22,8 +22,6 @@ class UI(QtWidgets.QWidget):
         super().__init__()
 
         self.layout=QtWidgets.QGridLayout(self)
-        self.layout.setRowStretch(1,20)
-        self.layout.setColumnStretch(1,20)
 
         self.menubar=QtWidgets.QMenuBar(self)
         self.actiondd=self.menubar.addMenu('&Game')
@@ -96,21 +94,19 @@ class Game(QtWidgets.QWidget):
                 button=ButtonCustom(self)
                 if self.grid[x][y]==-1:
                     button.setText('B')
-                    button.setStyleSheet("QPushButton { color : rgba(255, 0, 0, 0)}")
+                    button.setStyleSheet("QPushButton {color : rgba(0, 0, 0, 0)}")
                 elif self.grid[x][y]==1:
                     button.setText('1')
-                    button.setStyleSheet("QPushButton {color : rgba(0, 255, 102, 0)}")
+                    button.setStyleSheet("QPushButton {color : rgba(0, 0, 0, 0)}")
                 elif self.grid[x][y]==2:
                     button.setText('2')
-                    button.setStyleSheet("QPushButton {color : rgba(200, 255, 0, 0)}")
+                    button.setStyleSheet("QPushButton {color : rgba(0, 0, 0, 0)}")
                 elif self.grid[x][y]==3:
                     button.setText('3')
-                    button.setStyleSheet("QPushButton {color : rgba(255, 100, 40, 0)}")
+                    button.setStyleSheet("QPushButton {color : rgba(0, 0, 0, 0)}")
                 elif self.grid[x][y]==4:
                     button.setText('4')
-                    button.setStyleSheet("QPushButton {color : rgba(255, 100, 0, 0)}")
-                elif button.text()>'4':
-                    button.setStyleSheet("QPushButton {color : rgba(74, 255, 165, 0)}")
+                    button.setStyleSheet("QPushButton {color : rgba(0, 0, 0, 0)}")
                 else:
                     button.setText('0')
                     button.setStyleSheet("QPushButton {color : rgba(1, 1, 1, 0)}")
