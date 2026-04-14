@@ -22,6 +22,8 @@ class UI(QtWidgets.QWidget):
         super().__init__()
 
         self.layout=QtWidgets.QGridLayout(self)
+        self.layout.setRowStretch(1,20)
+        self.layout.setColumnStretch(1,20)
 
         self.menubar=QtWidgets.QMenuBar(self)
         self.actiondd=self.menubar.addMenu('&Game')
@@ -39,7 +41,11 @@ class UI(QtWidgets.QWidget):
         self.actiondd.addAction(self.newact)
         self.actiondd.addAction(self.quitact)
 
-        self.layout.addWidget(self.menubar)
+        self.flaglabel=QtWidgets.QLabel('FLAGS')
+        self.flaglabel.setStyleSheet("QLabel {color : rgba(255, 140, 0, 255)}")
+
+        self.layout.addWidget(self.menubar,0,0,-1,-1)
+        self.layout.addWidget(self.flaglabel,0,10)
 
     def new(self):
         new_game=Game(10,10,10)
@@ -55,6 +61,7 @@ class Game(QtWidgets.QWidget):
         self.rows=rows
         self.columns=columns
         self.bombs=bombs
+        self.initbombs=bombs
         self.grid=[]
         self.buttons=[]
 
@@ -108,7 +115,7 @@ class Game(QtWidgets.QWidget):
                     button.setText('0')
                     button.setStyleSheet("QPushButton {color : rgba(1, 1, 1, 0)}")
                     button.setProperty("revealed", False)
-                window.layout.addWidget(button,x,y)
+                window.layout.addWidget(button,x+1,y+1)
                 button.clicked.connect(lambda checked=False,button=button,x=x,y=y:self.handle_click(button,x,y))
                 button.right_clicked.connect(lambda checked=False,button=button,x=x,y=y:self.handle_right_click(button,x,y))
                 rowbuttons.append(button)
@@ -116,6 +123,9 @@ class Game(QtWidgets.QWidget):
             self.buttons.append(rowbuttons)
             y=0
             x+=1
+
+            window.layout.addWidget(window.flaglabel,self.rows+1,self.columns)
+            window.flaglabel.setText(self.bombs.__str__())
 
     def handle_click(self, button, x, y):
         if button.text() == 'B':
@@ -137,7 +147,7 @@ class Game(QtWidgets.QWidget):
         self.checkwin()
 
     def handle_right_click(self, button, x, y):
-        if button.text() == 'F':
+        if button.text() == 'F' and self.bombs>=0 and self.bombs<=self.initbombs:
             self.bombs+=1
             self.grid[x][y] = self.grid[x][y]
             if self.grid[x][y]==-1:
@@ -161,9 +171,11 @@ class Game(QtWidgets.QWidget):
                 button.setText('0')
                 button.setStyleSheet("QPushButton {color : rgba(10, 9, 36, 0)}")
         else:
-            button.setText('F')
-            button.setStyleSheet("QPushButton { color: orange; }")
-            self.bombs-=1
+            if self.bombs>=0:
+                button.setText('F')
+                button.setStyleSheet("QPushButton {color : rgba(255, 140, 0, 255)}")
+                self.bombs-=1
+        window.flaglabel.setText(self.bombs.__str__())
 
     def reveal(self, x, y):
         neighbours = [(-1, 0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]
@@ -226,7 +238,7 @@ class RestartUI(QtWidgets.QWidget):
         os.execv(sys.executable, [sys.executable]+sys.argv)
             
 window=UI()
-window.setFixedSize(600,800)
+window.setFixedSize(600,600)
 window.show()
 restarter=RestartUI()
 restarter.setFixedSize(200,100)
