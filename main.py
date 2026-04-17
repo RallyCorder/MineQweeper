@@ -10,7 +10,7 @@ app=QtWidgets.QApplication([])
 app.setApplicationName('MineQweeper')
 app.setApplicationDisplayName('MineQweeper')
 
-conf=QSettings('MineQweeper','Mineqweeper')
+conf=QSettings('MineQweeper','mineqweeper')
 conf.value('difficulty')
 conf.beginGroup('Custom')
 conf.value('customx')
@@ -19,6 +19,13 @@ conf.value('custombombs')
 conf.endGroup()
 
 conf.sync()
+
+if conf.value('theme')=='system':
+    app.setStyle('qt6ct-style')
+if conf.value('theme')=='dark':
+    app.setStyle('Adwaita-Dark')
+if conf.value('theme')=='light':
+    app.setStyle('Adwaita')
 
 class ButtonCustom(QtWidgets.QPushButton):
     right_clicked=QtCore.Signal()
@@ -110,7 +117,7 @@ class Game(QtWidgets.QWidget):
                     neighbours=[(-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]
                     for deltax,deltay in neighbours:
                         newx,newy=x+deltax,y+deltay
-                        if 0 <=newx<self.rows and 0<=newy<self.columns:
+                        if 0<=newx<self.rows and 0<=newy<self.columns:
                             if self.grid[newx][newy]!=-1:
                                 self.grid[newx][newy]+=1
                     break
